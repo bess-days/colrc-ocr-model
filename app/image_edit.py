@@ -46,3 +46,11 @@ def apply_grain(image):
     noisy_pil_image = Image.fromarray(noisy_image)
     
     return noisy_pil_image
+def augment_image(img):
+    if random.random() < 0.7:
+        img = apply_blur(img)
+    if random.random() < 0.7:
+        img = apply_exposure(img)
+        if random.random() < 0.7:
+            img = apply_grain(img)
+    return img
