@@ -5,15 +5,9 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 import cv2
 from app.image_edit import apply_blur, apply_exposure, apply_grain, augment_image
-def get_sources():
-    df = pd.read_csv("sources/roots.csv")
-    salish_words = df['salish'].to_list()
-    with open("sources/english.txt", "r", encoding="utf-8") as f:
-        english_words = [line.strip() for line in f if line.strip()]
-    return salish_words, english_words
-def clean_salish(word):
-    return re.sub(r"[-./()/+=·\-\]\[]", "", word)
-salish_words_clean = [clean_salish(w[1:-1]) for w in get_sources[0]]
+from utils.text_utils import load_wordlist
+
+salish_words, english_words = load_wordlist("sources/roots.csv", "sources/english.txt")
 def make_text_sample(salish_words, english_words):
     salish_sample = " ".join(random.sample(salish_words, k=random.randint(3,5)))
     english_sample = " ".join(random.sample(english_words, k=random.randint(3,5)))
@@ -26,7 +20,7 @@ def make_text_sample(salish_words, english_words):
 os.makedirs("synthetic/images", exist_ok=True)
 os.makedirs("synthetic/labels", exist_ok=True)
 for i in range(10):
-    text = make_text_sample(salish_words_clean, get_sources()[1])
+    text = make_text_sample(salish_words, english_words)
     img = Image.new("L", (1400, 100), color='white')
     draw = ImageDraw.Draw(img)
     size = random.randint(24, 50)
@@ -35,7 +29,7 @@ for i in range(10):
              "NotoSans-Medium.ttf", "NotoSans-Regular.ttf", "NotoSans-Thin.ttf",
              "NotoSans-SemiBold.ttf", "DoulosSIL-Regular.ttf"]
     font = ImageFont.truetype(random.choice(fonts), size)
-    draw.text((10, 10), text, font=font, fill=0)
+    draw.text((20, 60), text, font=font, fill=0)
     img = augment_image(img)
     img.save(f"synthetic/images/line{i}.png")
     with open(f"synthetic/labels/line{i}.txt", "w", encoding="utf-8") as f:
