@@ -24,9 +24,10 @@ def make_text_sample(salish_words, english_words):
 os.makedirs("synthetic/images", exist_ok=True)
 os.makedirs("synthetic/labels", exist_ok=True)
 font_cfg = json.load(open("sources/fonts_config.json"))
-all_fonts = font_cfg["Charis"] +font_cfg["Duolos"] +  font_cfg["NotoSans"]
+all_fonts = font_cfg["Charis"] +font_cfg["Doulos"] +  font_cfg["NotoSans"]
 def random_font():
     fpath = random.choice(all_fonts)
+    print(fpath)
     size = random.randint(24, 64)
     return ImageFont.truetype(fpath, size=size)
 

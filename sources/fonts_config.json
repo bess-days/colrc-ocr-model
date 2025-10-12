@@ -5,8 +5,8 @@
         "sources/fonts/Charis-Medium.ttf",
         "sources/fonts/Charis-Regular.ttf"
     ],
-    "Duolos": [
-        "sources/fonts/DuolosSIL-Regular.ttf"
+    "Doulos": [
+        "sources/fonts/DoulosSIL-Regular.ttf"
     ],
     "NotoSans": [
         "sources/fonts/NotoSans-Bold.ttf",
