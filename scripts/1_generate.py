@@ -73,7 +73,7 @@ def make_text_sample2():
                 mixed.append(text_utils.make_paragraph(english_words, salish_words, lines=1))
         para = "\n".join(mixed)
     return para
-for i in range(10):
+for i in range(1000):
     text = make_text_sample(salish_words, english_words)
     font = random_font()
     img = render_text_block(text, font, img_w=1400, img_h=400)
