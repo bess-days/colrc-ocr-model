@@ -5,6 +5,7 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 import cv2
 import sys, os
+import json
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils import image_utils
 from utils import text_utils
@@ -22,12 +23,10 @@ def make_text_sample(salish_words, english_words):
     return random.choice(layouts)
 os.makedirs("synthetic/images", exist_ok=True)
 os.makedirs("synthetic/labels", exist_ok=True)
+font_cfg = json.load(open("sources/font_config.json"))
+all_fonts = font_cfg["Charis", "Duolos",  "NotoSans"]
 def random_font():
-    fonts = ["Charis-Regular.ttf", "Charis-Bold.ttf", "Charis-Medium.ttf", "Charis-Italic.ttf",
-             "NotoSans-Bold.ttf", "NotoSans-ExtraLight.ttf", "NotoSans-Light.ttf",
-             "NotoSans-Medium.ttf", "NotoSans-Regular.ttf", "NotoSans-Thin.ttf",
-             "NotoSans-SemiBold.ttf", "DoulosSIL-Regular.ttf"]
-    fpath = random.choice(fonts)
+    fpath = random.choice(all_fonts)
     size = random.randint(24, 64)
     return ImageFont.truetype(fpath, size=size)
 
