@@ -27,7 +27,6 @@ font_cfg = json.load(open("sources/fonts_config.json"))
 all_fonts = font_cfg["Charis"] +font_cfg["Doulos"] +  font_cfg["NotoSans"]
 def random_font():
     fpath = random.choice(all_fonts)
-    print(fpath)
     size = random.randint(24, 64)
     return ImageFont.truetype(fpath, size=size)
 

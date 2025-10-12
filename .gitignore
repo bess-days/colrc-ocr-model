@@ -1,1 +1,3 @@
 .venv/
+utils/__pycache__/image_utils.cpython-312.pyc
+utils/__pycache__/text_utils.cpython-312.pyc
