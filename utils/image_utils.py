@@ -2,6 +2,7 @@
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import numpy as np
 import random
+import cv2
 def apply_blur(img):
     blur_values = [5, 7, 9, 11, 13, 15, 17]
     blur_amount = random.choice(blur_values)
@@ -47,10 +48,10 @@ def apply_grain(image):
     
     return noisy_pil_image
 def augment_image(img):
-    if random.random() < 0.7:
+    if random.random() < 0.6:
         img = apply_blur(img)
-    if random.random() < 0.7:
+    if random.random() < 0.6:
         img = apply_exposure(img)
-        if random.random() < 0.7:
+        if random.random() < 0.6:
             img = apply_grain(img)
     return img
