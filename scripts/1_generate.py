@@ -4,7 +4,7 @@ import random
 import os
 from PIL import Image, ImageDraw, ImageFont
 import cv2
-from app.image_edit import apply_blur, apply_exposure, apply_grain, augment_image
+from utils.image_utils import apply_blur, apply_exposure, apply_grain, augment_image
 from utils.text_utils import load_wordlist
 
 salish_words, english_words = load_wordlist("sources/roots.csv", "sources/english.txt")
