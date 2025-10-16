@@ -2,7 +2,8 @@
 utils/__pycache__/image_utils.cpython-312.pyc
 utils/__pycache__/text_utils.cpython-312.pyc
 /trocr-salish/checkpoint-400
-/synthetic
-/scripts/trocr-salish
-/new_synthetic
-/scipts/checkpoint-300
+/synthetic/
+/scripts/trocr-salish/
+/new_synthetic/
+/scripts/checkpoint-300/
+
