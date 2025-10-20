@@ -7,3 +7,5 @@ torch
 tqdm
 scikit-learn
 opencv-python
+evaluate
+jiwer
