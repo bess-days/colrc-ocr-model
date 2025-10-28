@@ -6,7 +6,7 @@ def clean_salish(word: str) -> str:
     Remove phonetic/morpheme boundary markers from Salish words.
     Adjust regex as needed.
     """
-    return re.sub(r"[-./?+=\[\]]", "", word[1:-1])
+    return re.sub(r"[·/\.\\\?\+=\[\]\-\(\)‑‿]", "", word[1:-1])
 
 def load_wordlist(csv_path, txt_path):
     df = pd.read_csv(csv_path, encoding="utf-8")
