@@ -87,16 +87,41 @@ post_phase = [
 ]
 pipeline = AugraphyPipeline(ink_phase=ink_phase, post_phase=post_phase)
 os.makedirs("./mark_synthetic", exist_ok=True)
+"""
+    
 for i in range(500):
     sentence = generate_sentence(gen_words)
     image = generate_image(sentence)
-    path = f"./mark_synthetic/sample_{i}.tif"
+    path = f"./mark_synthetic/sample_{i}.png"
     image.save(path)
     im = cv2.imread(path)
     augmented_image = pipeline(im)
     cv2.imwrite(path, augmented_image)
-    with open(f"./mark_synthetic/sample_{i}.gt.txt", "w", encoding="utf-8") as f:
+    with open(f"./mark_synthetic/sample_{i}.txt", "w", encoding="utf-8") as f:
+        f.write(sentence)
+    """
+
+os.makedirs("./cda", exist_ok=True)
+os.makedirs("./cda/train", exist_ok=True)
+os.makedirs("./cda/val", exist_ok=True)
+for i in range(500):
+    sentence = generate_sentence(gen_words)
+    image = generate_image(sentence)
+    path = f"./cda/train/sample_{i}.png"
+    image.save(path)
+    im = cv2.imread(path)
+    augmented_image = pipeline(im)
+    cv2.imwrite(path, augmented_image)
+    with open(f"./cda/train/sample_{i}.txt", "w", encoding="utf-8") as f:
+        f.write(sentence)
+for i in range(100):
+    sentence = generate_sentence(gen_words)
+    image = generate_image(sentence)
+    path = f"./cda/val/sample_{i}.png"
+    image.save(path)
+    im = cv2.imread(path)
+    augmented_image = pipeline(im)
+    cv2.imwrite(path, augmented_image)
+    with open(f"./cda/val/sample_{i}.txt", "w", encoding="utf-8") as f:
         f.write(sentence)
     
-
-
