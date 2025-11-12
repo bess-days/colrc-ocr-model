@@ -1,12 +1,13 @@
 import re
 import pandas as pd
 import random
-def clean_salish(word: str) -> str:
-    """
-    Remove phonetic/morpheme boundary markers from Salish words.
-    Adjust regex as needed.
-    """
-    return re.sub(r"[·/\.\\\?\+=\[\]\-\(\)‑‿]", "", word[1:-1])
+import regex as re
+
+def clean_salish(word):
+    word = re.sub(r'(?![\'])\p{P}', "", word[1:-1], flags=re.UNICODE)
+    word = re.sub(r'[=+·‿]', ''  , word)
+    return word
+
 
 def load_wordlist(csv_path, txt_path):
     df = pd.read_csv(csv_path, encoding="utf-8")
@@ -30,3 +31,6 @@ def make_paragraph(salish, english, lines=3):
             out.append(make_sentence(english))
     return "\n ".join(out)
 
+salish_words, english_words = load_wordlist("./sources/roots.csv", "./sources/english.txt")
+for w in salish_words[:10]:
+    print(repr(w))

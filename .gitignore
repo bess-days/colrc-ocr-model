@@ -7,4 +7,6 @@ utils/__pycache__/text_utils.cpython-312.pyc
 /new_synthetic/
 /scripts/checkpoint-300/
 =0.26.0
-
+augraphy_cache/
+mark_synthetic/
+fonts/

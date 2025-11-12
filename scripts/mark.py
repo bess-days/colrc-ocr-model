@@ -3,7 +3,7 @@ import re
 import random
 import markovify
 import os
-from augraphy import *
+from augraphy import DirtyDrum, SubtleNoise, Scribbles, LowInkRandomLines, InkBleed, AugraphyPipeline
 import cv2
 from PIL import Image, ImageDraw, ImageFont
 text = "hɔi xʷiý ä'säl täto äli'o kuḿ 'qät'p xʷiý äli'c ä'säl. tc:taq́ä't'p ha sqäĺsi' (wɫku̥mc) hä ttćä'säl tmu's:lc äkʷn täíxʷi 'itsxu'i äkʷn t'ä'xʷu̥ntmät stsi'gwtu̥mc hɔi t'i' tsi'ˡ hahui tcńadosaĺqsi'ẃäs äku'stɛm ku'ᵘtci''t nᵃ\u0308kunk'ʷä'tpɛntsut xʷiýa sqäĺsi' xʷä 'äku'stɛm t'i'ˡ ɫä kʷints ɫä ẃ:ĺẃ:ĺi'ḿs  xʷi'ˡɫ h:nk'ʷät'pɛntsut xʷa sqäísi' tciya'ĺ'ĺxʷqɛn k'ʷäý atciya'ĺxʷqɛn ɫa 'äɫ ɛɫä'xʷä'äs lä'djɛntɛm. xä'ʀɛntsut äku'stus ɫa si'nstä'äs näᵃ\u0308 kux̥al kutcsxʷu̥t'i'ɫtśä'ᵃ\u0308 tsäaᵃ\u0308 ttcnä'k'ʷä'ᵃ\u0308 xʷi'ˡɫ tśäli'c:c tciya'ĺxʷqɛn xʷi'ˡ tiýt́i'ýäqʷt utśa'tśɛx̥ms xʷiýä q́ʷi'ˡɫ ':tsq́ʷä'ᵃ\u0308ɫälwi's  xu''l pänä'ᵃ\u0308 suuyäpu̥mc 'astq́ʷi' tsi'ˡɫ c:ɫ t'ut'u̥k'ʷi'ĺup. xʷiýa suᵘyä' umäĺtsi'': 'äᵃ\u0308mi't'tćädä'ᵃ\u0308 tcäɫkusx̥ɛnäʙɛngwh'ýqɛn lut(h)äᵃ\u0308ýi'ɫɛnts xuxʷiýä guɫqaqi'tstcs i'ɫn:lc ɫ gwä'ýtsɛn i't'ɛt.c. ätśɛmu'ɫn:lc ɫa sts:tsa'saĺqs. xʷist ɫuẃä tätc (h)nlä'q́ɛntsutɛn ńuɫxʷ q́äsp sɛnkʷi''ts ttsaqi'nä'ämɛnts itsgwä'lp ɫuẃä tsä'txʷs:lc tä'aᵃ\u0308tcu'sɛm xʷa sts:tsa'saĺqs hiɫ gwi'tcts itsgwä'lp tsätxʷs:lc pu'ᵘpu'ᵘsi'ntc cɛtćmi'nts ut'uqʷa''' sci''tɛmc k'uk'ʷuńi'ýä'ᵃ\u0308 uɫmiĺtsi'ˡˠ ut'ugʷä''s stsɛtai'ẃtɛḿc täĺtsi'ˡ uupɛ̤'s quqʷa'ᵃqʷä'äĺ pɛpu'ĺutätcuĺ akʷn nä'ᵃ\u0308tätcnlä'q́ɛntsutɛn nxatxati'ɫtśä'äntp hnṕɛṕa'q́ʷɛńts'asx̥ux̥ʷɔḿqɛn ni''tɛpä'x̥‿äẃäsɛnts yu'tśäm:s sxu'ᵘxu'ᵘni'toäɫp "
@@ -24,7 +24,7 @@ class CharText(markovify.NewlineText):
         return "".join(words)
 gen_words = []
 text_model = CharText(corpus_for_char_model, state_size=2) 
-for i in range(1000):
+for i in range(2000):
     new_word = text_model.make_sentence(
         tries=50,
         max_words=10,
@@ -38,7 +38,6 @@ def generate_sentence(words, min_words=4, max_words=8):
         sentence.append(random.choice(words))
     return " ".join(sentence) + "."
 
-os.makedirs("./mark_synthetic/images", exist_ok=True)
 def generate_image(sentence):
     img = Image.new("RGB", (1800, 200), color="white")
     draw = ImageDraw.Draw(img)
@@ -87,15 +86,17 @@ post_phase = [
     
 ]
 pipeline = AugraphyPipeline(ink_phase=ink_phase, post_phase=post_phase)
-for i in range(10):
-    #print(generate_sentence(gen_words))
+os.makedirs("./mark_synthetic", exist_ok=True)
+for i in range(500):
+    sentence = generate_sentence(gen_words)
+    image = generate_image(sentence)
+    path = f"./mark_synthetic/sample_{i}.tif"
+    image.save(path)
+    im = cv2.imread(path)
+    augmented_image = pipeline(im)
+    cv2.imwrite(path, augmented_image)
+    with open(f"./mark_synthetic/sample_{i}.gt.txt", "w", encoding="utf-8") as f:
+        f.write(sentence)
     
-    image = generate_image(generate_sentence(gen_words))
-    image.save(f"./mark_synthetic/images/image_{i}.png")
-import os
-for file in os.listdir("./mark_synthetic/images"):
-    if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff')):
-        file_path = os.path.join("./mark_synthetic/images", file)
-        image = cv2.imread(file_path)
-        augmented_image = pipeline(image)
-        cv2.imwrite(f"./mark_synthetic/augmented_image/{file}", augmented_image)
+
+
