@@ -31,7 +31,7 @@ for i in range(2000):
         min_words=2
     )
     gen_words.append(new_word)
-def generate_sentence(words, min_words=4, max_words=8):
+def generate_sentence(words, min_words=6, max_words=8):
     n_words = random.randint(min_words, max_words)
     sentence = []
     for _ in range(n_words):
@@ -39,13 +39,13 @@ def generate_sentence(words, min_words=4, max_words=8):
     return " ".join(sentence) + "."
 
 def generate_image(sentence):
-    img = Image.new("RGB", (1400, 200), color="white")
+    img = Image.new("RGB", (1400, 250), color="white")
     draw = ImageDraw.Draw(img)
     #font_path = "sources/fonts/ITC Stone Serif Phonetic IPA Regular.ttf"
     font_path = "sources/fonts/Charis-Medium.ttf"
     font_size = 48
     font = ImageFont.truetype(font_path, font_size)
-    draw.text((100,100), text=sentence, font=font, fill="black")
+    draw.text((125,125), text=sentence, font=font, fill="black")
     return img
 ink_phase = [
         LowInkRandomLines(count_range=(5, 10),
@@ -86,7 +86,6 @@ post_phase = [
     
 ]
 pipeline = AugraphyPipeline(ink_phase=ink_phase, post_phase=post_phase)
-os.makedirs("./mark_synthetic", exist_ok=True)
 """
     
 for i in range(500):
@@ -104,6 +103,7 @@ for i in range(500):
 os.makedirs("./cda", exist_ok=True)
 os.makedirs("./cda/train", exist_ok=True)
 os.makedirs("./cda/val", exist_ok=True)
+
 for i in range(10):
     sentence = generate_sentence(gen_words)
     image = generate_image(sentence)
