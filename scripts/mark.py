@@ -24,7 +24,7 @@ class CharText(markovify.NewlineText):
         return "".join(words)
 gen_words = []
 text_model = CharText(corpus_for_char_model, state_size=2) 
-for i in range(2000):
+for i in range(3000):
     new_word = text_model.make_sentence(
         tries=50,
         max_words=10,
@@ -104,7 +104,7 @@ for i in range(500):
 os.makedirs("./cda", exist_ok=True)
 os.makedirs("./cda/train", exist_ok=True)
 os.makedirs("./cda/val", exist_ok=True)
-for i in range(500):
+for i in range(3000):
     sentence = generate_sentence(gen_words)
     image = generate_image(sentence)
     path = f"./cda/train/sample_{i}.png"
@@ -114,7 +114,7 @@ for i in range(500):
     cv2.imwrite(path, augmented_image)
     with open(f"./cda/train/sample_{i}.txt", "w", encoding="utf-8") as f:
         f.write(sentence)
-for i in range(100):
+for i in range(600):
     sentence = generate_sentence(gen_words)
     image = generate_image(sentence)
     path = f"./cda/val/sample_{i}.png"
