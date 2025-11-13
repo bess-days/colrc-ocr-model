@@ -24,7 +24,7 @@ class CharText(markovify.NewlineText):
         return "".join(words)
 gen_words = []
 text_model = CharText(corpus_for_char_model, state_size=2) 
-for i in range(3000):
+for i in range(2000):
     new_word = text_model.make_sentence(
         tries=50,
         max_words=10,
@@ -39,7 +39,7 @@ def generate_sentence(words, min_words=4, max_words=8):
     return " ".join(sentence) + "."
 
 def generate_image(sentence):
-    img = Image.new("RGB", (1800, 200), color="white")
+    img = Image.new("RGB", (1400, 200), color="white")
     draw = ImageDraw.Draw(img)
     #font_path = "sources/fonts/ITC Stone Serif Phonetic IPA Regular.ttf"
     font_path = "sources/fonts/Charis-Medium.ttf"
@@ -52,9 +52,9 @@ ink_phase = [
                                                     use_consistent_lines=True,
                                                     noise_probability=0.1,
                                                     ),
-        InkBleed(intensity_range=(0.4, 0.7),
+        InkBleed(intensity_range=(0.5, 0.9),
                     kernel_size=(5, 5),
-                    severity=(0.3, 0.5)
+                    severity=(0.5, 0.7)
                     )
 ]
 post_phase = [
@@ -104,7 +104,7 @@ for i in range(500):
 os.makedirs("./cda", exist_ok=True)
 os.makedirs("./cda/train", exist_ok=True)
 os.makedirs("./cda/val", exist_ok=True)
-for i in range(3000):
+for i in range(10):
     sentence = generate_sentence(gen_words)
     image = generate_image(sentence)
     path = f"./cda/train/sample_{i}.png"
@@ -114,7 +114,7 @@ for i in range(3000):
     cv2.imwrite(path, augmented_image)
     with open(f"./cda/train/sample_{i}.txt", "w", encoding="utf-8") as f:
         f.write(sentence)
-for i in range(600):
+for i in range(10):
     sentence = generate_sentence(gen_words)
     image = generate_image(sentence)
     path = f"./cda/val/sample_{i}.png"
