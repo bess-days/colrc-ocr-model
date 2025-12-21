@@ -1,20 +1,13 @@
 {
     "Charis": [
-        "../sources/fonts/Charis-Bold.ttf",
-        "../sources/fonts/Charis-Italic.ttf",
-        "../sources/fonts/Charis-Medium.ttf",
-        "../sources/fonts/Charis-Regular.ttf"
+        "sources/fonts/Charis-Bold.ttf",
+        "sources/fonts/Charis-Regular.ttf"
     ],
     "Doulos": [
-        "../sources/fonts/DoulosSIL-Regular.ttf"
+        "sources/fonts/DoulosSIL-Regular.ttf"
     ],
     "NotoSans": [
-        "../sources/fonts/NotoSans-Bold.ttf",
-        "../sources/fonts/NotoSans-Light.ttf",
-        "../sources/fonts/NotoSans-ExtraLight.ttf",
-        "../sources/fonts/NotoSans-Medium.ttf",
-        "../sources/fonts/NotoSans-Regular.ttf",
-        "../sources/fonts/NotoSans-SemiBold.ttf",
-        "../sources/fonts/NotoSans-Thin.ttf"
+        "sources/fonts/NotoSans-Regular.ttf"
     ]
+
 }
