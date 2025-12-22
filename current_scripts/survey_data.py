@@ -15,12 +15,13 @@ for filename in os.listdir("./ground-truths"):
 text = large_str
 words_str = re.sub(r"\.", "", large_str)
 word_list = set([word.strip() for word in words_str.split(' ') if word.strip()])
+print(word_list)
 corpus = "\n".join(word_list)
 corpus = unicodedata.normalize("NFC", text)
 letters = [ch for ch in corpus if ch.isalpha()]
 print(len(letters))
 freqs = Counter(letters)
-print(freqs)
+print(freqs.keys())
 sorted_freqs = sorted(freqs.values(), reverse=True)
 sorted_items = freqs.most_common()
 letters_sorted = [l for l, f in sorted_items]

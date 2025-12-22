@@ -1,0 +1,11 @@
+pytesseract
+numpy
+matplotlib
+augraphy
+markovify
+Pillow
+tensorboard
+opencv-python
+evaluate
+pdf2image
+jiwer
