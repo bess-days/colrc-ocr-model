@@ -22,4 +22,6 @@ def ocr_image(pdf_path, output_path):
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(extracted_text)
 
-ocr_image("./to_test/OriginOfIndianTribes_Typed.pdf", "./to_test/outputs/tribes.txt")
+#ocr_image("./to_test/OriginOfIndianTribes_Typed.pdf", "./to_test/outputs/tribes.txt")
+custom_config = r'--psm 6'
+print(image_to_string(Image.open("./sample_page.png"), lang='ltr+eng', config=custom_config))

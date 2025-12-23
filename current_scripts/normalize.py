@@ -2,7 +2,7 @@ import unicodedata
 from pathlib import Path
 import json
 
-def process_gt(gt_dir="./ground-truths",
+def process_gt(gt_dir="./norm_ground",
                alphabet_file="my_alphabet.txt",
                postocr_mapping_file="postocr_mapping.json"):
     """
