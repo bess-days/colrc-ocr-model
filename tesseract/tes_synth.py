@@ -10,7 +10,7 @@ from datasets import Dataset
 import numpy as np
 random.seed(42)
 
-sp = "ᵃ̈ᵘᶦⁱᵃ"
+sp = "ᵃ̈ᵘᶥⁱᵃ"
 
 large_str = ""
 characters = set()
