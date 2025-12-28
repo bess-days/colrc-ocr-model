@@ -9,7 +9,7 @@ import json
 from datasets import Dataset
 import numpy as np
 random.seed(42)
-sp = "ᵃ̈ᵘᶦⁱᵃ"
+sp = "ᵃ̈ᶦᵘⁱᵃ"
 large_str = ""
 characters = set()
 for filename in os.listdir("./ground-truths"):
