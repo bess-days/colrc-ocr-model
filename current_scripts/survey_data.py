@@ -4,6 +4,7 @@ import re
 import os
 import numpy as np
 import unicodedata
+import re
 large_str = ""
 for filename in os.listdir("./ground-truths"):
         if filename.endswith(".txt"):
@@ -12,16 +13,17 @@ for filename in os.listdir("./ground-truths"):
                 t = f.read()
                 full_text = " " + t
                 large_str += full_text
-text = large_str
-words_str = re.sub(r"\.", "", large_str)
-word_list = set([word.strip() for word in words_str.split(' ') if word.strip()])
-print(word_list)
-corpus = "\n".join(word_list)
-corpus = unicodedata.normalize("NFC", text)
-letters = [ch for ch in corpus if ch.isalpha()]
-print(len(letters))
-freqs = Counter(letters)
-print(freqs.keys())
+import regex
+import unicodedata
+from collections import Counter
+
+def grapheme_counter(text):
+    text = re.sub(r"[\s+']", "", text)
+    text = unicodedata.normalize("NFC", text)
+    graphemes = regex.findall(r"\X", text)
+    return Counter(graphemes)
+freqs = grapheme_counter(large_str)
+print(freqs)
 sorted_freqs = sorted(freqs.values(), reverse=True)
 sorted_items = freqs.most_common()
 letters_sorted = [l for l, f in sorted_items]

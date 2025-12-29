@@ -9,10 +9,8 @@ cers = []
 for gt_file in gt_dir.glob("*.gt.txt"):
     base = gt_file.stem.replace(".gt", "")
     pred_file = pred_dir / f"{base}.txt"
-
     if not pred_file.exists():
         continue
-
     gt = gt_file.read_text(encoding="utf-8").strip()
     pred = pred_file.read_text(encoding="utf-8").strip()
 
