@@ -45,7 +45,7 @@ class Phonetic(Dataset):
         return encoding
 processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-printed")
 model = VisionEncoderDecoderModel.from_pretrained("microsoft/trocr-base-printed")
-special_tokens = ["č", "ɫ", "ʷ", "u̥","ᵘ", "ɔ", "ä", "ĺ", "ˀ", "ý", "ś", "ɛ", "x̥","ʙ", "ẃ", "q́","ḿ", "ˠ", "t́", "ʀ", "ᵃ̈", "r̥", "ⁱ",":", "(", ")", "ẃ","ć", "ṕ", "ń", "u̥", "ᵃ" ]
+special_tokens = ["č", "ɫ", "ʷ", "u̥","ᵘ", "ɔ", "ä", "ĺ", "ˀ", "ý", "ś", "ᴇ", "x̥","ʙ", "ẃ", "q́","ḿ", "ˠ", "t́", "ʀ", "ᵃ̈", "r̥", "ⁱ",":", "(", ")", "ẃ","ć", "ṕ", "ń", "u̥", "ᵃ" ]
 processor.tokenizer.add_tokens(special_tokens)
 model.decoder.resize_token_embeddings(len(processor.tokenizer))
 train_dataset = Phonetic(root_dir='./',
