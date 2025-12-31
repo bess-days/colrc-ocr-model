@@ -5,65 +5,53 @@ import os
 import numpy as np
 import unicodedata
 import re
+import numpy as np
 large_str = ""
+lengths = []
 for filename in os.listdir("./ground-truths"):
         if filename.endswith(".txt"):
             filepath = os.path.join("./ground-truths", filename)
             with open(filepath, 'r', encoding='utf-8') as f:
                 t = f.read()
+                t = unicodedata.normalize("NFC", t)
                 full_text = " " + t
                 large_str += full_text
+                lengths.append(len(t))
+x = large_str.count(unicodedata.normalize("NFC", "kuḿ"))
+print(x)
+print(f"Average character length of ground-truths: {np.mean(lengths)}")
 import regex
 import unicodedata
 from collections import Counter
 
 def grapheme_counter(text):
-    text = re.sub(r"[\s+']", "", text)
+    text = re.sub(r"[\s+'.\)\(\?\-]", "", text)
     text = unicodedata.normalize("NFC", text)
     graphemes = regex.findall(r"\X", text)
     return Counter(graphemes)
-freqs = grapheme_counter(large_str)
-print(freqs)
-sorted_freqs = sorted(freqs.values(), reverse=True)
-sorted_items = freqs.most_common()
-letters_sorted = [l for l, f in sorted_items]
-counts_sorted = [f for l, f in sorted_items]
-ranks = range(1, len(counts_sorted) + 1)
-top_n = 20
+freqs_counter = grapheme_counter(large_str)
+print("Number of unique graphemes (excluding punctuation):", len(freqs_counter))
+print("Total grapheme count:", sum(freqs_counter.values()))
+print("Most common graphemes:", freqs_counter.most_common(20))
+print("Least common graphemes:", freqs_counter.most_common()[-10:])
+print("Frequency:", freqs_counter)
+def get_zipf_data(freq_counter):
+     freqs = np.array(sorted(freq_counter.values(), reverse=True))
+     ranks = np.arange(1, len(freqs) + 1)
+     log_ranks = np.log(ranks)
+     log_freqs = np.log(freqs)
+     slope, intercept = np.polyfit(log_ranks, log_freqs, 1)
+     alpha = -slope
+     return alpha, ranks, freqs, freq_counter
+def plot_zipf(ranks, freqs):
+    plt.figure()
+    plt.loglog(ranks, freqs, marker='o', linestyle='none')
+    plt.xlabel("Rank")
+    plt.ylabel("Frequency")
+    plt.title("Zipf Plot of Letter Frequencies")
+    plt.show()
+alpha, ranks, freqs, counts = get_zipf_data(freqs_counter)
 
-plt.figure()
-plt.loglog(ranks, counts_sorted, marker='o')
+print(f"Estimated Zipf exponent (alpha): {alpha:.2f}")
 
-for rank, freq, letter in zip(ranks[:top_n], counts_sorted[:top_n], letters_sorted[:top_n]):
-    plt.annotate(
-        letter,
-        (rank, freq),
-        xytext=(5, 5),
-        textcoords="offset points",
-        fontsize=10,
-        fontweight="bold"
-    )
-
-plt.xlabel("Rank")
-plt.ylabel("Frequency")
-plt.title("Zipf Curve (Top Letters Labeled)")
-plt.show()
-plt.figure()
-plt.loglog(ranks, counts_sorted, marker='o')
-
-# Label each point
-for rank, freq, letter in zip(ranks, counts_sorted, letters_sorted):
-    plt.text(rank, freq, letter, fontsize=9)
-
-plt.xlabel("Rank")
-plt.ylabel("Frequency")
-plt.title("Zipf Curve with Letter Labels")
-plt.show()
-ranks = range(1, len(sorted_freqs) + 1)
-log_ranks = np.log(ranks)
-log_freqs = np.log(sorted_freqs)
-slope, intercept = np.polyfit(log_ranks, log_freqs, 1)
-print(f"Estimated Zipf exponent: {slope:.2f}")
-
-
-
+plot_zipf(ranks, freqs)
