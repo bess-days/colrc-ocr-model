@@ -8,9 +8,11 @@ import re
 import numpy as np
 large_str = ""
 lengths = []
-for filename in os.listdir("./ground-truths"):
+#rpath = "./ground-truths"
+rpath = "./test/gt"
+for filename in os.listdir(rpath):
         if filename.endswith(".txt"):
-            filepath = os.path.join("./ground-truths", filename)
+            filepath = os.path.join(rpath, filename)
             with open(filepath, 'r', encoding='utf-8') as f:
                 t = f.read()
                 t = unicodedata.normalize("NFC", t)
