@@ -8,8 +8,8 @@ import re
 import numpy as np
 large_str = ""
 lengths = []
-#rpath = "./ground-truths"
-rpath = "./test/gt"
+rpath = "./ground-truths"
+#rpath = "./test/gt"
 for filename in os.listdir(rpath):
         if filename.endswith(".txt"):
             filepath = os.path.join(rpath, filename)

@@ -3,8 +3,8 @@ from pathlib import Path
 import unicodedata
 
 gt_dir = Path("./test/gt")
-pred_dir = Path("./test/pred")
-
+#pred_dir = Path("./test/pred")
+pred_dir = Path("./test/pred-base")
 cers = []
 
 for gt_file in gt_dir.glob("*.gt.txt"):
