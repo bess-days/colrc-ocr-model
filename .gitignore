@@ -14,3 +14,4 @@ cda/
 /scripts/trocr-cda
 myenv/
 /all_data
+.DS_Store
