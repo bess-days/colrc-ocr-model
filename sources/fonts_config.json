@@ -1,13 +1,6 @@
 {
-    "Charis": [
-        "sources/fonts/Charis-Bold.ttf",
-        "sources/fonts/Charis-Regular.ttf"
-    ],
     "Doulos": [
         "sources/fonts/DoulosSIL-Regular.ttf"
-    ],
-    "NotoSans": [
-        "sources/fonts/NotoSans-Regular.ttf"
     ]
 
 }

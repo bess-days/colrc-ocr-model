@@ -9,7 +9,7 @@ import json
 from datasets import Dataset
 import numpy as np
 random.seed(42)
-sp = "ᵃ̈ᶥᵘⁱᵃᵓιᴇ"
+sp = "ᵃ̈ᶥᵘⁱᵃᵓιᴇɩ"
 large_str = ""
 characters = set()
 for filename in os.listdir("./ground-truths"):
@@ -53,7 +53,7 @@ def generate_sentence(words, min_words=6, max_words=8):
     sentence[punc] += "."
     return " ".join(sentence)
 font_cfg = json.load(open("./sources/fonts_config.json"))
-all_fonts = font_cfg["Charis"] +font_cfg["Doulos"]
+all_fonts = font_cfg["Doulos"]
 def random_font():
     fpath = random.choice(all_fonts)
     size = random.randint(30, 50)
@@ -99,22 +99,7 @@ post_phase = [
                       ksize=(3, 3),
                       sigmaX=0,
                       ),
-    SubtleNoise(subtle_range=25),
-    Scribbles(
-                scribbles_type="random",
-                scribbles_location="random",
-                scribbles_ink = "pen",
-                scribbles_size_range=(100, 200),
-                scribbles_count_range=(1,2),
-                scribbles_thickness_range=(1, 2),
-                scribbles_brightness_change=[32, 64, 128],
-                scribbles_text="random",
-                scribbles_text_font=random.choice(all_fonts),
-                scribbles_text_rotate_range=(0, 360),
-                scribbles_lines_stroke_count_range=(1, 3),
-                scribbles_color=(27,27,27),
-                p = .1
-            )
+    SubtleNoise(subtle_range=25)
 
     
 ]
@@ -122,8 +107,6 @@ pipeline = AugraphyPipeline(ink_phase=ink_phase, post_phase=post_phase, log=Fals
 
 
 os.makedirs("./gen-samples2", exist_ok=True)
-os.makedirs("./data", exist_ok=True)
-"""
 for i in range(20):
     sentence = generate_sentence(gen_words)
     font = random_font()
@@ -149,3 +132,4 @@ for i in range(3000):
     entries["image"].append(aug)
 data = Dataset.from_dict(entries)
 data.save_to_disk("./data/")
+"""
