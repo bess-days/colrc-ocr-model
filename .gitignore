@@ -16,6 +16,6 @@ myenv/
 /all_data
 /gen-samples2
 /tes-synth
-/test/pred
-/test/pages
-/test/pred-base
+/test/pred/
+/test/pages/
+/test/pred-base/
