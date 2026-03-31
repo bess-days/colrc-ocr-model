@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 import json
 from datasets import Dataset
 import numpy as np
+import unicodedata
 random.seed(42)
 sp = "ᵃ̈ᶥᵘⁱᵃᵓιᴇɩ"
 large_str = ""
@@ -17,6 +18,7 @@ for filename in os.listdir("./ground-truths"):
             filepath = os.path.join("./ground-truths", filename)
             with open(filepath, 'r', encoding='utf-8') as f:
                 t = f.read()
+                t = unicodedata.normalize("NFC", t)
                 for char in list(t):
                     characters.add(char)
                 full_text = " " + t
@@ -78,9 +80,9 @@ ink_phase = [
                                                     noise_probability=0.1,
                                                     ),
                                             
-        InkBleed(intensity_range=(0.5, 0.9),
-                    kernel_size=(5, 5),
-                    severity=(0.5, 0.7)
+        InkBleed(intensity_range=(0.5, 0.8),
+                    kernel_size=(3, 5),
+                    severity=(0.4, 0.6)
                     ),
         Letterpress(n_samples=(100, 200),
                           n_clusters=(100, 300),
@@ -91,14 +93,6 @@ ink_phase = [
                           ),
 ]
 post_phase = [
-    DirtyDrum(line_width_range=(1, 3),
-                      line_concentration=0.1,
-                      direction=random.choice([0,1]),
-                      noise_intensity=random.uniform(.1,.2),
-                      noise_value=(0, 15),
-                      ksize=(3, 3),
-                      sigmaX=0,
-                      ),
     SubtleNoise(subtle_range=25)
 
     
@@ -107,7 +101,7 @@ pipeline = AugraphyPipeline(ink_phase=ink_phase, post_phase=post_phase, log=Fals
 
 
 os.makedirs("./gen-samples2", exist_ok=True)
-for i in range(20):
+for i in range(1000):
     sentence = generate_sentence(gen_words)
     font = random_font()
     image = generate_image(sentence,font)

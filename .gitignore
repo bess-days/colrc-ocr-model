@@ -14,4 +14,8 @@ cda/
 /scripts/trocr-cda
 myenv/
 /all_data
-/test/
+/gen-samples2
+/tes-synth
+/test/pred
+/test/pages
+/test/pred-base

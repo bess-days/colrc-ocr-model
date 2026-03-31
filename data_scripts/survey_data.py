@@ -9,6 +9,7 @@ import numpy as np
 large_str = ""
 lengths = []
 rpath = "./ground-truths"
+#rpath="./gen-samples2"
 #rpath = "./test/gt"
 for filename in os.listdir(rpath):
         if filename.endswith(".txt"):
@@ -19,8 +20,6 @@ for filename in os.listdir(rpath):
                 full_text = " " + t
                 large_str += full_text
                 lengths.append(len(t))
-x = large_str.count(unicodedata.normalize("NFC", "kuḿ"))
-print(x)
 print(f"Average character length of ground-truths: {np.mean(lengths)}")
 import regex
 import unicodedata

@@ -1,44 +1,102 @@
-# Set Up
+# colrc-ocr-model
 
-Step 1. Clone the repository in desired location using `git clone https://github.com/uazhlt-ms-program/ling-582-fall-2025-course-project-code-indigenous-language-ocr.git`
+A custom OCR (Optical Character Recognition) pipeline for **Coeur d'Alene** documents, combining Tesseract and TrOCR model training with synthetic data generation to recognize historical and specialized typography.
 
-Step 2. Open the repository in your favorite editor like VSC Code or PyCharm
+---
 
-Step 3. Set up the virtual enviroment (Instructions are for MacOS/Linux operating systems and how I do it, but here is a complete tutorial including Windows: [PythonDocs](https://docs.python.org/3/library/venv.html)) A virtual enviroment allows you to install the dependencies without having to mess with other installations used for other projects.
+## Overview
 
+This project trains and evaluates OCR models on specialized document corpora. It supports two OCR backends — **Tesseract** and **TrOCR (Transformer-based OCR)** — and includes tooling for generating synthetic training data, fine-tuning models, and evaluating character/line-level accuracy.
 
-1. Go to terminal and do ```python3 -m venv <name of your venv>```
+---
 
-2. Run ```source <name of your venv>/bin/activate```
+## Project Structure
 
-3. Once you see the name of your venv on the left of the console line you're good to run ```pip install -r requirements``` this will install the needed package and create a venv folder in your repository that holds them all
+```
+colrc-ocr-model/
+├── data_scripts/
+│   ├── survey_data.py        # Loads and preprocesses real survey/document data
+│   └── synthetic_gen.py      # Generates synthetic training images from fonts
+│
+├── fonts/                    # Font files used for synthetic data generation
+│
+├── gen-samples/             # Generated synthetic sample images (output directory)
+│
+├── model/
+│   └── cda.traineddata       # Trained Tesseract model data file
+│
+├── sources/
+│   ├── fonts/
+│   │   ├── Charis-Bold.ttf
+│   │   ├── Charis-Regular.ttf
+│   │   └── DoulosSIL-Regular.ttf
+│   └── fonts_config.json     # Font configuration for synthetic generation
+│
+├── tesseract_scripts/
+│   ├── cer.py                # Character Error Rate (CER) evaluation
+│   ├── lines.py              # Line-level segmentation and processing
+│   ├── new_test.py           # Tesseract evaluation runner (newer)
+│
+├── trocr_scripts/
+│   ├── current.py            # Current TrOCR inference pipeline
+│   ├── finetune.py           # Fine-tuning TrOCR on domain-specific data
+│   ├── test_finteune.py      # Evaluates fine-tuned TrOCR model
+│   ├── test_original.py      # Evaluates baseline (unmodified) TrOCR model
+│   └── test.py               # General TrOCR test runner
+│
+└── test/
+    ├── gt/                   # Ground truth transcriptions for evaluation
+    ├── images/               # Test document images
+    └── pages/                # Full-page test documents
+```
 
-4. You might have to select interpreter in your prefered IDE, which will be the name of your virtual enviroment. 
+---
 
+## Components
 
+### Synthetic Data Generation
 
-TO RUN THE MODEL
+Scripts in `data_scripts` generate synthetic training images by rendering text in period-appropriate fonts (Charis, DoulosSIL) defined in `sources/fonts_config.json`. This allows training on typographic styles that match the target documents without requiring large labeled real-world datasets.
 
-To first test how well the pre-trained model does, go to `test_original.py` and customize as to your model and image you want to test, the results should be printed in terminal.
+### Tesseract Pipeline
 
-In order to run the model, navigate `current_scripts/current.py` and run that, it should run the model in terminal. The results will be saved to `cda-train` folder and the finished checkpoints and model with the lowest CER, along with the processor, will be saved as `last_model`, `last_processor `respectivly. 
+The `tesseract_scripts/` directory contains tools for:
+- **`cer.py`** — computing Character Error Rate against ground truth
+- **`lines.py`** — segmenting documents into line-level units for evaluation
+- **`new_test.py`** — running evaluation on test images
 
-To test your model without further finetuning, go to `current_scripts/test.py` and run that program, customizing it to try different models and files.
+The trained model artifact is stored at `model/cda.traineddata` and can be loaded directly by Tesseract via the `--tessdata-dir` flag.
 
-In order to finetune your model, go to `current_scripts/finetune.py` which will do another script similar to `current.py` and train a model on the ground truths. This will save into the folder `finetune-train`
+### TrOCR Pipeline
 
-Similarly, to test the finetuned model, run `current_scripts/test_finetune.py`
+The `trocr_scripts/` directory wraps Microsoft's [TrOCR](https://huggingface.co/microsoft/trocr-base-handwritten) transformer model with domain fine-tuning:
+- **`finetune.py`** — fine-tunes TrOCR on COLRC-specific image/text pairs
+- **`test_original.py`** — evaluates the pre-trained baseline model
+- **`test_finteune.py`** — evaluates after fine-tuning
+- **`current.py`** — runs inference with the current best model
 
+### Evaluation
 
+Ground truth transcriptions live in `test/gt/` and correspond to images in `test/images/` and `test/pages/`. Evaluation scripts compute CER (Character Error Rate) to compare model outputs against reference text.
 
+---
 
-# Task
+## Model
 
-See https://uazhlt-ms-program.github.io/ling-582-fall-2025-course-blog/assignments/course-project
+The trained Tesseract model (`model/cda.traineddata`) is a custom `.traineddata` file fine-tuned on COLRC document typography. To use it:
 
+```bash
+tesseract input.tif output --tessdata-dir ./model -l cda
+```
 
-# Notes
-- You are not obligated to use Python
-- You may delete or alter any files in this repository
-- You are free to add dependencies
-  - Ensure that your code can be installed/used on another machine running Linux or MacOS (consider containerizing your project with Docker or an equivalent technology)
+---
+
+## Evaluation Metric
+
+This project uses **Character Error Rate (CER)** as the primary evaluation metric:
+
+```
+CER = (Substitutions + Insertions + Deletions) / Total Characters in Ground Truth
+```
+
+Lower is better. CER is computed per-line and aggregated across the test set.
