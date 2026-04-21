@@ -44,6 +44,7 @@ for i in range(1000):
         gen_words.append(new_word)
 print(len(gen_words))
 print(len(set(gen_words)))
+print(set(gen_words))
 gen_words = list(set(gen_words)) + list(word_list)
 print(len(gen_words))
 def generate_sentence(words, min_words=6, max_words=8):
@@ -99,7 +100,7 @@ post_phase = [
 ]
 pipeline = AugraphyPipeline(ink_phase=ink_phase, post_phase=post_phase, log=False)
 
-
+"""
 os.makedirs("./gen-samples2", exist_ok=True)
 for i in range(1000):
     sentence = generate_sentence(gen_words)
@@ -112,7 +113,7 @@ for i in range(1000):
     cv2.imwrite(path, augmented_image)
     with open(f"./gen-samples2/sample_{i}.txt", "w", encoding="utf-8") as f:
         f.write(sentence)
-"""
+
 entries = {"image":[], "text":[]}
 for i in range(3000):
     sentence = generate_sentence(gen_words)
