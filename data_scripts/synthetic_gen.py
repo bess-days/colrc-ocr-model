@@ -13,9 +13,9 @@ random.seed(42)
 sp = "ᵃ̈ᶥᵘⁱᵃᵓιᴇɩ"
 large_str = ""
 characters = set()
-for filename in os.listdir("./ground-truths"):
+for filename in os.listdir("/Users/sbg/colrc-ocr-model/ground-truths"):
         if filename.endswith(".txt"):
-            filepath = os.path.join("./ground-truths", filename)
+            filepath = os.path.join("/Users/sbg/colrc-ocr-model/ground-truths", filename)
             with open(filepath, 'r', encoding='utf-8') as f:
                 t = f.read()
                 t = unicodedata.normalize("NFC", t)
@@ -55,7 +55,7 @@ def generate_sentence(words, min_words=6, max_words=8):
         sentence.append(random.choice(words))
     sentence[punc] += "."
     return " ".join(sentence)
-font_cfg = json.load(open("./sources/fonts_config.json"))
+font_cfg = json.load(open("/Users/sbg/colrc-ocr-model/sources/fonts_config.json"))
 all_fonts = font_cfg["Doulos"]
 def random_font():
     fpath = random.choice(all_fonts)
@@ -100,7 +100,7 @@ post_phase = [
 ]
 pipeline = AugraphyPipeline(ink_phase=ink_phase, post_phase=post_phase, log=False)
 
-"""
+
 os.makedirs("./gen-samples2", exist_ok=True)
 for i in range(1000):
     sentence = generate_sentence(gen_words)
@@ -111,9 +111,9 @@ for i in range(1000):
     im = cv2.imread(path)
     augmented_image = pipeline(im)
     cv2.imwrite(path, augmented_image)
-    with open(f"./gen-samples2/sample_{i}.txt", "w", encoding="utf-8") as f:
+    with open(f"./gen-samples2/sample_{i}.gt.txt", "w", encoding="utf-8") as f:
         f.write(sentence)
-
+"""
 entries = {"image":[], "text":[]}
 for i in range(3000):
     sentence = generate_sentence(gen_words)

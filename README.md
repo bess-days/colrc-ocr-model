@@ -15,8 +15,8 @@ This project trains and evaluates OCR models on specialized document corpora. It
 ```
 colrc-ocr-model/
 ├── data_scripts/
-│   ├── survey_data.py        # Loads and preprocesses real survey/document data
-│   └── synthetic_gen.py      # Generates synthetic training images from fonts
+│   ├── survey_data.py        # Linguistic analysis on synthetic data
+│   └── synthetic_gen.py      # Generates synthetic training images
 │
 ├── fonts/                    # Font files used for synthetic data generation
 │
@@ -33,9 +33,12 @@ colrc-ocr-model/
 │   └── fonts_config.json     # Font configuration for synthetic generation
 │
 ├── tesseract_scripts/
-│   ├── cer.py                # Character Error Rate (CER) evaluation
-│   ├── lines.py              # Line-level segmentation and processing
+
+
 │   ├── new_test.py           # Tesseract evaluation runner (newer)
+│   ├── per_line_cer.py                # Character Error Rate (CER) evaluation on every line in a folder
+
+│   ├── total_cer.py              # Overall CER evaluation for model evaluation folder
 │
 ├── trocr_scripts/
 │   ├── current.py            # Current TrOCR inference pipeline
@@ -61,9 +64,11 @@ Scripts in `data_scripts` generate synthetic training images by rendering text i
 ### Tesseract Pipeline
 
 The `tesseract_scripts/` directory contains tools for:
-- **`cer.py`** — computing Character Error Rate against ground truth
-- **`lines.py`** — segmenting documents into line-level units for evaluation
-- **`new_test.py`** — running evaluation on test images
+- **`page_test.py`** — Performs OCR and extracts text from inputed file
+
+Used to test models:
+- **`per_line_cer.py`** — gathers the CER on each line of test data vs model's output of the test data
+- **`total_cer.py`** — calculates the overall CER of model output
 
 The trained model artifact is stored at `model/cda.traineddata` and can be loaded directly by Tesseract via the `--tessdata-dir` flag.
 
@@ -83,11 +88,26 @@ Ground truth transcriptions live in `test/gt/` and correspond to images in `test
 
 ## Model
 
-The trained Tesseract model (`model/cda.traineddata`) is a custom `.traineddata` file fine-tuned on COLRC document typography. To use it:
+The trained Tesseract model (`model/cda.traineddata`) is a custom `.traineddata` file fine-tuned on COLRC document typography. To use on a single image and in console:
 
+
+### CLI Outputs
+Extract OCR'd text to a file:
 ```bash
-tesseract input.tif output --tessdata-dir ./model -l cda
+tesseract input.png output_file_name --tessdata-dir ./model -l cda
 ```
+
+Print in console:
+```bash
+tesseract input.png stdout --tessdata-dir ./model -l cda
+``` 
+
+
+### Python Script Multi-page Output
+
+OR to export text or print an entire book/pages run
+
+`tesseract_scripts/page_test`
 
 ---
 
