@@ -21,7 +21,7 @@ colrc-ocr-model/
 ├── gen-samples/             # Generated synthetic sample images (output directory)
 │
 ├── model/
-│   └── cda.traineddata       # Trained Tesseract model data file
+│   └── rcd.traineddata       # Trained Tesseract model data file (Short for Reichard, to differentiate from CdA from other project)
 │
 ├── sources/
 │   ├── fonts/
@@ -105,12 +105,12 @@ The trained Tesseract model (`model/cda.traineddata`) is a custom `.traineddata`
 ### CLI Outputs
 Extract OCR'd text to a file:
 ```bash
-tesseract input.png output_file_name --tessdata-dir ./model -l cda
+tesseract input.png output_file_name --tessdata-dir ./model -l rcd
 ```
 
 Print in console:
 ```bash
-tesseract input.png stdout --tessdata-dir ./model -l cda
+tesseract input.png stdout --tessdata-dir ./model -l rcd
 ``` 
 
 
@@ -122,7 +122,7 @@ OR to export text or print an entire book/pages run
 
 
 
-Note though, with testing a whole page/pdf is difficult. The source texts are sometimes uneven lines of CdA and English. While Tesseract does have a co-language paramater cda+eng, it doesn't work extraordinarily well. But where it does sense CdA it does so relatively accurately.
+Note though, with testing a whole page/pdf is difficult. The source texts are sometimes uneven lines of CdA and English. While Tesseract does have a co-language paramater rcd+eng, it doesn't work extraordinarily well. But where it does sense rcd it does so relatively accurately.
 
 ---
 

@@ -16,7 +16,7 @@ def ocr_image(pdf_path, output_path, first_page=0, last_page=None):
         images = convert_from_path(pdf_path=pdf_path, output_folder=path, first_page=first_page, last_page=last_page)
     extracted_text = ""
     for i, image in enumerate(images):
-        text = image_to_string(image, lang='cda+eng', config='--tessdata-dir "./model"')
+        text = image_to_string(image, lang='rcd+eng', config='--tessdata-dir "./model"')
         # Doing CdA + English should in theory allow the English translation and CDA texts to be extracted, but in practice, it can't differentiate one line is CdA and one is English so occasionally merges it
         extracted_text += f"--- Page {i + 1} ---\n"
         extracted_text += text + "\n"
@@ -25,4 +25,4 @@ def ocr_image(pdf_path, output_path, first_page=0, last_page=None):
 
 ocr_image("./test/pages/CoyoteAndBadger_Typed.pdf", "./test/pages_output/cb.txt", 1, 3)
 custom_config = r'--psm 6'
-print(image_to_string(Image.open("./sample_page.png"), lang='cda+eng', config=custom_config))
+print(image_to_string(Image.open("./sample_page.png"), lang='rcd+eng', config=custom_config))
