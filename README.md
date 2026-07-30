@@ -25,13 +25,6 @@ colrc-ocr-model/
 ├── model/
 │   └── cda.traineddata       # Trained Tesseract model data file
 │
-├── sources/
-│   ├── fonts/
-│   │   ├── Charis-Bold.ttf
-│   │   ├── Charis-Regular.ttf
-│   │   └── DoulosSIL-Regular.ttf
-│   └── fonts_config.json     # Font configuration for synthetic generation
-│
 ├── tesseract_scripts/
 
 
@@ -88,7 +81,7 @@ Ground truth transcriptions live in `test/gt/` and correspond to images in `test
 
 ## Model
 
-The trained Tesseract model (`model/cda.traineddata`) is a custom `.traineddata` file fine-tuned on COLRC document typography. To use on a single image and in console:
+The trained Tesseract model (`model/cda.traineddata`) is a custom `.traineddata` file fine-tuned on COLRC document typography. To use on a single image in CdA and in console:
 
 
 ### CLI Outputs
@@ -109,14 +102,21 @@ OR to export text or print an entire book/pages run
 
 `tesseract_scripts/page_test`
 
+
+
+Note though, with testing a whole page/pdf is difficult. The source texts are sometimes uneven lines of CdA and English. While Tesseract does have a co-language paramater cda+eng, it doesn't work extraordinarily well. But where it does sense CdA it does so relatively accurately.
+
 ---
 
-## Evaluation Metric
+## Next Steps
 
-This project uses **Character Error Rate (CER)** as the primary evaluation metric:
+Find a way to OCR these specific typed Reichard documents:
+Options:
+- split the lines into different images and run the relative OCR language model
 
-```
-CER = (Substitutions + Insertions + Deletions) / Total Characters in Ground Truth
-```
+- Optimize the scanned pdfs for the lines to be straighter and overall less noisy to improve smoother extraction
 
-Lower is better. CER is computed per-line and aggregated across the test set.
+
+Overall next steps for documents already in CdA:
+
+- Create a website interface for community members to upload their photograhs
