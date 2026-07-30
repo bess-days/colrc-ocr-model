@@ -18,19 +18,21 @@ colrc-ocr-model/
 │   ├── survey_data.py        # Linguistic analysis on synthetic data
 │   └── synthetic_gen.py      # Generates synthetic training images
 │
-├── fonts/                    # Font files used for synthetic data generation
-│
 ├── gen-samples/             # Generated synthetic sample images (output directory)
 │
 ├── model/
 │   └── cda.traineddata       # Trained Tesseract model data file
 │
+├── sources/
+│   ├── fonts/
+│   │   ├── Charis-Bold.ttf
+│   │   ├── Charis-Regular.ttf
+│   │   └── DoulosSIL-Regular.ttf
+│   └── fonts_config.json     # Font configuration for synthetic generation
+│
 ├── tesseract_scripts/
-
-
 │   ├── new_test.py           # Tesseract evaluation runner (newer)
 │   ├── per_line_cer.py                # Character Error Rate (CER) evaluation on every line in a folder
-
 │   ├── total_cer.py              # Overall CER evaluation for model evaluation folder
 │
 ├── trocr_scripts/
@@ -43,7 +45,9 @@ colrc-ocr-model/
 └── test/
     ├── gt/                   # Ground truth transcriptions for evaluation
     ├── images/               # Test document images
-    └── pages/                # Full-page test documents
+    ├── pages/               # Full-page test documents
+    ├── pred/               # Prediction outputs on eval data from model
+    └── pred-base/                # Prection outputs on eval data from base (Latin) model
 ```
 
 ---
@@ -59,7 +63,21 @@ Scripts in `data_scripts` generate synthetic training images by rendering text i
 The `tesseract_scripts/` directory contains tools for:
 - **`page_test.py`** — Performs OCR and extracts text from inputed file
 
-Used to test models:
+
+To test a specific model to compare models create a folder - pred and run:
+
+```bash
+for img in test/images/*.png; do
+  base=$(basename "$img" .png)
+  tesseract "$img" "test/pred/$base" \
+    -l my_lang \
+    --psm 6 \
+    --oem 1
+done
+```
+
+This will perform OCR on your evaluation images on a specific model and output it, then you can run the following test models: 
+
 - **`per_line_cer.py`** — gathers the CER on each line of test data vs model's output of the test data
 - **`total_cer.py`** — calculates the overall CER of model output
 
