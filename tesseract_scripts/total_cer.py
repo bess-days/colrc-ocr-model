@@ -3,8 +3,8 @@ from pathlib import Path
 import unicodedata
 
 gt_dir = Path("./test/gt")
-pred_dir = Path("./test/pred-base")
-#pred_dir = Path("./test/pred")
+pred_dir = Path("./test/pred")
+#pred_dir = Path("./test/pred-base")
 cers = []
 pred_str = ""
 gt_str = ""
