@@ -33,7 +33,7 @@ colrc-ocr-model/
 ├── tesseract_scripts/
 │   ├── new_test.py           # Tesseract evaluation runner (newer)
 │   ├── per_line_cer.py                # Character Error Rate (CER) evaluation on every line in a folder
-│   ├── total_cer.py              # Overall CER evaluation for model evaluation folder
+│   └── total_cer.py              # Overall CER evaluation for model evaluation folder
 │
 ├── trocr_scripts/
 │   ├── current.py            # Current TrOCR inference pipeline
